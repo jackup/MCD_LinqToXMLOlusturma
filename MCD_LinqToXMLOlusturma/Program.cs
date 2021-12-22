@@ -12,7 +12,8 @@ namespace MCD_LinqToXMLOlusturma
     {
         static void Main(string[] args)
         {
-            List<Ogrenci> Ogrencilerim = new List<Ogrenci>();
+            #region Linq ile xml'e veri yazma
+            /*List<Ogrenci> Ogrencilerim = new List<Ogrenci>();
             for (int i = 0; i < 50; i++)
             {
                 Ogrenci temp = new Ogrenci();
@@ -32,7 +33,24 @@ namespace MCD_LinqToXMLOlusturma
                       new XElement("Numara", x.Numara)
             ))));
 
-            doc.Save("c:\\XML\\Ogrencilerim.xml");
+            doc.Save("c:\\XML\\Ogrencilerim.xml");*/
+            #endregion
+
+            #region Xml Okuma
+            XDocument DockOku = XDocument.Load(@"c:\\XML\\Ogrencilerim.xml");
+            List<XElement> OkunanXElements = DockOku.Descendants("Ogrenci").ToList();
+            List<Ogrenci> okunanData = new List<Ogrenci>();
+
+            foreach (XElement item in OkunanXElements)
+            {
+                Ogrenci Temp = new Ogrenci();
+                Temp.ID = Guid.Parse(item.Attribute("ID").Value);
+                Temp.Isim = item.Element("İsim").Value;
+                Temp.Soyisim = item.Element("Soyisim").Value;
+                Temp.Numara = int.Parse(item.Element("Numara").Value);
+                okunanData.Add(Temp);
+            }
+            #endregion
         }
     }
 }
